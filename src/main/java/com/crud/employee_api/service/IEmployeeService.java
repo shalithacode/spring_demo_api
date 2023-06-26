@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface IEmployeeService {
 
         List<Employee> findAll();
+        Employee findById(int id);
+        public Employee save(Employee employee);
+        public void deleteById(int id);
 }

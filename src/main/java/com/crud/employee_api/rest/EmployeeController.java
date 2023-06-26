@@ -6,9 +6,7 @@ import com.crud.employee_api.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +26,22 @@ private IEmployeeService iEmployeeService;
 
         return new ResponseEntity<>(iEmployeeService.findAll(), HttpStatus.OK);
     }
+
+    @GetMapping("/employees/{id}")
+    public ResponseEntity<Employee> findAll(@PathVariable int id) {
+
+    Employee employee =iEmployeeService.findById(id);
+    if (employee == null) throw new RuntimeException("Employee not found id : "+ id);
+        return new ResponseEntity<>(employee, HttpStatus.OK);
+    }
+
+    @PostMapping("/employees")
+    public ResponseEntity<Employee> addEmployee(@RequestBody Employee newEmployee){
+        newEmployee.setId(0);
+        Employee employee =iEmployeeService.save(newEmployee);
+        if (employee == null) throw new RuntimeException("Employee not saved ");
+        return new ResponseEntity<>(employee, HttpStatus.OK);
+    }
+
+
 }
