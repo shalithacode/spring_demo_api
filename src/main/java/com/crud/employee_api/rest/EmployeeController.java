@@ -2,6 +2,7 @@ package com.crud.employee_api.rest;
 
 import com.crud.employee_api.DAO.EmployeeDAO;
 import com.crud.employee_api.entity.Employee;
+import com.crud.employee_api.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +16,16 @@ import java.util.List;
 @RequestMapping("/api")
 public class EmployeeController {
 
-    private EmployeeDAO emplyeeDAO;
+private IEmployeeService iEmployeeService;
 
-    @Autowired
-    public EmployeeController(EmployeeDAO emplyeeDAO) {
-        this.emplyeeDAO = emplyeeDAO;
+@Autowired
+    public EmployeeController(IEmployeeService EmployeeService) {
+        this.iEmployeeService = EmployeeService;
     }
 
     @GetMapping("/employees")
     public ResponseEntity<List<Employee>> findAll() {
-        List<Employee> employees = emplyeeDAO.findAll();
-        return new ResponseEntity<>(employees, HttpStatus.OK);
+
+        return new ResponseEntity<>(iEmployeeService.findAll(), HttpStatus.OK);
     }
 }
