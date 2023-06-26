@@ -42,6 +42,19 @@ private IEmployeeService iEmployeeService;
         if (employee == null) throw new RuntimeException("Employee not saved ");
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
+    @PutMapping("/employees")
+    public ResponseEntity<Employee> updateEmployee(@RequestBody Employee newEmployee){
 
+        Employee employee =iEmployeeService.save(newEmployee);
+        if (employee == null) throw new RuntimeException("Employee not updated ");
+        return new ResponseEntity<>(employee, HttpStatus.OK);
+    }
+    @DeleteMapping("/employees/{id}")
+    public void deleteEmployeeById(@PathVariable int id) {
+
+        iEmployeeService.deleteById(id);
+
+
+    }
 
 }
