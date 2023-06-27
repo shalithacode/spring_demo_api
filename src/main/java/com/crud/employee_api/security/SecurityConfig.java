@@ -8,20 +8,22 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsManager(){
-        UserDetails John = User.builder().username("john").password("{noop}john123").roles("EMPLOYEE").build();
+    public UserDetailsManager userDetailsManager(DataSource dataSource){
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
 
-        UserDetails Mary = User.builder().username("mary").password("{noop}mary123").roles("EMPLOYEE","MANAGER").build();
-
-        UserDetails Suse = User.builder().username("suse").password("{noop}suse123").roles("EMPLOYEE","ADMIN").build();
-
-        return new InMemoryUserDetailsManager(John,Mary,Suse);
+        jdbcUserDetailsManager.setUsersByUsernameQuery("SELECT user_id, pw, active FROM members WHERE user_id =?");
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("SELECT user_id, role FROM roles WHERE user_id =?");
+        return jdbcUserDetailsManager;
     }
 
     @Bean
